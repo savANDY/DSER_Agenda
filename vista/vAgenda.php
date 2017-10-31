@@ -13,13 +13,13 @@
             <td><strong>Telefono</strong></td>
         </tr>
         <?php
-            for($i=0;$i<count($pd);$i++)
+            for($i=0;$i<count($row);$i++)
             {
                 ?>
                     <tr>
-                        <td><?php echo $pd[$i]["Nombre"]; ?></td>
-                        <td><?php echo $pd[$i]["Apellidos"]; ?></td>
-                        <td><?php echo $pd[$i]["Telefono"]; ?></td>
+                        <td><?php echo $row[$i]["Nombre"]; ?></td>
+                        <td><?php echo $row[$i]["Apellidos"]; ?></td>
+                        <td><?php echo $row[$i]["Telefono"]; ?></td>
                     </tr>
                 <?php
             }
