@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Nov 01, 2017 at 10:35 
--- Server version: 10.1.21-MariaDB
--- PHP Version: 7.1.1
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 07-11-2017 a las 10:11:32
+-- Versión del servidor: 10.1.26-MariaDB
+-- Versión de PHP: 7.1.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -17,13 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `dser_agenda`
+-- Base de datos: `dser_agenda`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `contactos`
+-- Estructura de tabla para la tabla `contactos`
 --
 
 CREATE TABLE `contactos` (
@@ -34,19 +36,20 @@ CREATE TABLE `contactos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `contactos`
+-- Volcado de datos para la tabla `contactos`
 --
 
 INSERT INTO `contactos` (`idContacto`, `Nombre`, `Apellidos`, `Telefono`) VALUES
 (1, 'Valeriu Andrei', 'Sanautanu', 651405555),
 (2, 'Julen', 'Estivez', 657388421),
 (3, 'Andoni', 'Tome', 675885254),
-(4, 'Iker', 'Torre', 688255161);
+(4, 'Iker', 'Torre', 688255161),
+(5, 'Xavi', 'Xavi', 69121254);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `emails`
+-- Estructura de tabla para la tabla `emails`
 --
 
 CREATE TABLE `emails` (
@@ -55,7 +58,7 @@ CREATE TABLE `emails` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `emails`
+-- Volcado de datos para la tabla `emails`
 --
 
 INSERT INTO `emails` (`email`, `idContacto`) VALUES
@@ -63,12 +66,13 @@ INSERT INTO `emails` (`email`, `idContacto`) VALUES
 ('dungulescu@yahoo.com', 1),
 ('savaleriu@gmail.com', 2),
 ('andoniando@gmail.com', 3),
-('torre@iker.com', 4);
+('torre@iker.com', 4),
+('xavierxavi@gmail.com', 5);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `grupos`
+-- Estructura de tabla para la tabla `grupos`
 --
 
 CREATE TABLE `grupos` (
@@ -77,7 +81,7 @@ CREATE TABLE `grupos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `grupos`
+-- Volcado de datos para la tabla `grupos`
 --
 
 INSERT INTO `grupos` (`idGrupo`, `Nombre`) VALUES
@@ -87,7 +91,7 @@ INSERT INTO `grupos` (`idGrupo`, `Nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rel_grupos`
+-- Estructura de tabla para la tabla `rel_grupos`
 --
 
 CREATE TABLE `rel_grupos` (
@@ -96,7 +100,7 @@ CREATE TABLE `rel_grupos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `rel_grupos`
+-- Volcado de datos para la tabla `rel_grupos`
 --
 
 INSERT INTO `rel_grupos` (`idGrupo`, `idContacto`) VALUES
@@ -104,33 +108,73 @@ INSERT INTO `rel_grupos` (`idGrupo`, `idContacto`) VALUES
 (1, 2),
 (1, 3),
 (1, 4),
-(2, 2);
+(2, 2),
+(2, 5);
+
+-- --------------------------------------------------------
 
 --
--- Indexes for dumped tables
+-- Estructura de tabla para la tabla `rol`
+--
+
+CREATE TABLE `rol` (
+  `idRol` int(11) NOT NULL,
+  `Nombre` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `rol`
+--
+
+INSERT INTO `rol` (`idRol`, `Nombre`) VALUES
+(1, 'Viewer'),
+(2, 'Administrador');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `idUsuario` int(11) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `rol` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`idUsuario`, `username`, `password`, `rol`) VALUES
+(1, 'savandy', '$2y$10$NhIf5l/50VwIzJ2wkwmvj.wuGc7w4vqJ4Ub7v39iOYmSURzxmG9pC', 2);
+
+--
+-- Índices para tablas volcadas
 --
 
 --
--- Indexes for table `contactos`
+-- Indices de la tabla `contactos`
 --
 ALTER TABLE `contactos`
   ADD PRIMARY KEY (`idContacto`);
 
 --
--- Indexes for table `emails`
+-- Indices de la tabla `emails`
 --
 ALTER TABLE `emails`
   ADD PRIMARY KEY (`email`),
   ADD KEY `contacto` (`idContacto`);
 
 --
--- Indexes for table `grupos`
+-- Indices de la tabla `grupos`
 --
 ALTER TABLE `grupos`
   ADD PRIMARY KEY (`idGrupo`);
 
 --
--- Indexes for table `rel_grupos`
+-- Indices de la tabla `rel_grupos`
 --
 ALTER TABLE `rel_grupos`
   ADD PRIMARY KEY (`idGrupo`,`idContacto`),
@@ -138,35 +182,65 @@ ALTER TABLE `rel_grupos`
   ADD KEY `idContacto` (`idContacto`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Indices de la tabla `rol`
+--
+ALTER TABLE `rol`
+  ADD PRIMARY KEY (`idRol`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`idUsuario`),
+  ADD KEY `rol` (`rol`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `contactos`
+-- AUTO_INCREMENT de la tabla `contactos`
 --
 ALTER TABLE `contactos`
-  MODIFY `idContacto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idContacto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
--- AUTO_INCREMENT for table `grupos`
+-- AUTO_INCREMENT de la tabla `grupos`
 --
 ALTER TABLE `grupos`
   MODIFY `idGrupo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT de la tabla `rol`
+--
+ALTER TABLE `rol`
+  MODIFY `idRol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- Restricciones para tablas volcadas
 --
 
 --
--- Constraints for table `emails`
+-- Filtros para la tabla `emails`
 --
 ALTER TABLE `emails`
   ADD CONSTRAINT `emails_ibfk_1` FOREIGN KEY (`idContacto`) REFERENCES `contactos` (`idContacto`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `rel_grupos`
+-- Filtros para la tabla `rel_grupos`
 --
 ALTER TABLE `rel_grupos`
   ADD CONSTRAINT `rel_grupos_ibfk_2` FOREIGN KEY (`idContacto`) REFERENCES `contactos` (`idContacto`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `rel_grupos_ibfk_3` FOREIGN KEY (`idGrupo`) REFERENCES `grupos` (`idGrupo`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`rol`) REFERENCES `rol` (`idRol`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
