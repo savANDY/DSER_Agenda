@@ -4,7 +4,7 @@
   <title>Agenda - Ejercicio de Repaso</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="../css/bootstrap.css">
+  <link rel="stylesheet" href="css/bootstrap.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
@@ -12,6 +12,14 @@
 
 <div class="container">
   <h2>Agenda</h2>
+
+<?php
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+  echo ("Estás logueado, usuario: " . $_SESSION['username'] . ", <a href='login/logout.php'>salir</a>");
+} else {
+  echo ("No estás logueado, <a href='login'>logueate aqui</a>");
+}
+ ?>
 
   <fieldset>
    <legend>Ordenar por:</legend>

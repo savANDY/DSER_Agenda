@@ -1,5 +1,10 @@
 <?php
-require_once("../modelo/mAgenda.php");
+if ($_SERVER["REQUEST_URI"] == "/dserAgenda/agenda/") {
+    require_once("../modelo/mAgenda.php");
+  } else {
+    require_once("modelo/mAgenda.php");
+  }
+
 $agenda = new Contacto();
 
 $nombreRecogido = "";
@@ -50,14 +55,14 @@ if(isset($_POST['resetear'])) {
   }
 
   if (isset($_COOKIE["nombre"])) {
-    $whereNombre = " AND (c.Nombre like '" . $_COOKIE["nombre"] . "')";
+    $whereNombre = " AND (c.Nombre like '%" . $_COOKIE["nombre"] . "%')";
 
   }
   if (isset($_COOKIE["apellidos"])) {
-    $whereApellidos = " AND (c.Apellidos like '" . $_COOKIE["apellidos"] . "')";
+    $whereApellidos = " AND (c.Apellidos like '%" . $_COOKIE["apellidos"] . "%')";
   }
   if (isset($_COOKIE["grupo"])) {
-    $whereGrupo = " AND (g.Nombre like '" . $_COOKIE["grupo"] . "')";
+    $whereGrupo = " AND (g.Nombre like '%" . $_COOKIE["grupo"] . "%')";
   }
 }
 
@@ -67,6 +72,11 @@ if (isset ($_COOKIE["orden"]) ) {
 } else {
   $row = $agenda->lista_contactos("sinorden", $whereNombre, $whereApellidos, $whereGrupo);
 }
-require_once("../vista/vAgenda.php");
+
+if ($_SERVER["REQUEST_URI"] == "/dserAgenda/agenda/") {
+    require_once("../vista/vAgenda.php");
+  } else {
+    require_once("vista/vAgenda.php");
+  }
 
 ?>
