@@ -24,24 +24,22 @@ class comprobarUsuario {
         $password = $_POST['password'];
 
 
-        $sql="select idUsuario, username, password, rol from usuarios where username = '$username'";
+        $sql="select u.idUsuario, u.username, u.password, r.nombre rol from usuarios u, rol r where (username = '$username') AND (u.rol = r.idRol)";
         $result = mysqli_query($this->link, $sql);
 
         if (mysqli_num_rows($result) > 0) {
 
           $row = $result->fetch_array(MYSQLI_ASSOC);
           if (password_verify($password, $row['password'])) {
-            if ($row['rol'] !== "2") {
-              echo ("No eres administrador");
-            } else {
-              echo "Creando sesion";
+
              $_SESSION['loggedin'] = true;
+             $_SESSION['rol'] = $row['rol'];
              $_SESSION['username'] = $username;
              $_SESSION['start'] = time();
              $_SESSION['expire'] = $_SESSION['start'] + (30 * 60);
              header('Location: ../index.php');
-             return true;
-           }
+
+           return true;
         } else {
           return false;
         }

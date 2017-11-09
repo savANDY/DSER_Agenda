@@ -5,8 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/estilo.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="js/javascript.js" type="text/javascript"></script>
 </head>
 <body>
 
@@ -15,7 +17,7 @@
 
 <?php
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-  echo ("Estás logueado, usuario: " . $_SESSION['username'] . ", <a href='login/logout.php'>salir</a>");
+  echo ("Estás logueado, usuario: " . $_SESSION['username'] . ", rol: " . $_SESSION['rol'] . ", <a href='login/logout.php'>salir</a>");
 } else {
   echo ("No estás logueado, <a href='login'>logueate aqui</a>");
 }
@@ -89,6 +91,12 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
         <th>Telefono</th>
         <th>Email(s)</th>
         <th><?php if (isset($_COOKIE["orden"]) && $_COOKIE["orden"]=="grupo") echo "↓";?>Grupo(s)</th>
+        <?php
+        if ($_SESSION['rol'] == "Administrador") {
+          echo ('<th class="text-right">Opciones</th>');
+        }
+        ?>
+
       </tr>
     </thead>
     <tbody>
@@ -103,10 +111,82 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
                       <td><?php echo $row[$i]["Telefono"]; ?></td>
                       <td><?php echo $row[$i]["Email"]; ?></td>
                       <td><?php echo $row[$i]["Grupo"]; ?></td>
+
+                      <?php
+                      if ($_SESSION['rol'] == "Administrador") {
+                        echo ('<td class="text-right"><a href="index.php?editar=' . $row[$i]["id"] . '"><button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-pencil"></span> </button></a>
+
+                        <a href="index.php?borrar=' . $row[$i]["id"] . '"><button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-remove"></span></button></a>
+                        </td>');
+                      }
+                      ?>
+
                   </tr>
               <?php
-          }
-      ?>
+              }
+              if ($_SESSION['rol'] == "Administrador") {
+                ?>
+                <form method="get" action="index.php">
+                <tr>
+                  <td>
+                  <div class="form-group">
+                    <input type="text" class="form-control" name="nombre" placeholder="Nombre">
+                  </div>
+                </td>
+                <td>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="apellidos" placeholder="Apellidos">
+                </div>
+              </td>
+              <td>
+              <div class="form-group">
+                <input type="tel" class="form-control" name="telefono" placeholder="Telefono">
+              </div>
+            </td>
+            <td>
+            <div class="form-group">
+
+
+
+              <div class="row" id="emailsNuevos">
+                <div class="col col-sm-8">
+              <input type="email" class="form-control col-xs-4" name="email1" placeholder="Email">
+            </div>
+
+              <div class="col col-sm-8" id="segundoEmail" style="display:none">
+            <input type="email" class="form-control col-xs-4" name="email2" placeholder="Email">
+          </div>
+
+
+            <div class="col col-sm-2">
+              <button id="botonNuevoEmail" type="button" class="btn btn-default btn-sm" onclick="aniadirEmail()">
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </div>
+
+            </div>
+            </div>
+          </td>
+          <td>
+          <div class="form-group">
+            <select multiple class="form-control" id="grupo" name="grupo">
+        <option>Familia</option>
+        <option>Amigos</option>
+        <option>Whatsapp</option>
+      </select>
+          </div>
+        </td>
+        <td>
+          <button type="submit" class="btn btn-default btn-sm">
+          Añadir</button>
+      </td>
+                </tr>
+              </form>
+              <?php
+              }
+              ?>
 
 
     </tbody>
