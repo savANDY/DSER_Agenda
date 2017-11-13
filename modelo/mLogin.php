@@ -20,8 +20,8 @@ class comprobarUsuario {
         self::set_names();
 
   if ((isset($_POST['username'])) && (isset($_POST['password']))){
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+        $username = filter_input($POST, 'username');
+        $password = filter_input($POST, 'password');
 
 
         $sql="select u.idUsuario, u.username, u.password, r.nombre rol from usuarios u, rol r where (username = '$username') AND (u.rol = r.idRol)";

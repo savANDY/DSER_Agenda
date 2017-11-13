@@ -5,7 +5,28 @@ if ($_SERVER["REQUEST_URI"] == "/dserAgenda/agenda/") {
     require_once("modelo/mAgenda.php");
   }
 
+if (($_POST) && (isset($_POST["nombreI"]))){
+
+  $nombrePost = filter_input(INPUT_POST, 'nombreI');
+  $apellidosPost = filter_input(INPUT_POST, 'apellidosI');
+  $telefonoPost = filter_input(INPUT_POST, 'telefonoI');
+  $email1Post = filter_input(INPUT_POST, 'email1I');
+  $email2Post = filter_input(INPUT_POST, 'email2I');
+  $grupoPost = $_POST['grupoI'];
+
+
+  foreach ($_POST['grupoI'] as $selected_option) {
+   echo $selected_option;
+  }
+
+  echo "Hola";
+
+  //insertarContacto($nombrePost, $apellidosPost, $telefonoPost, $email1Post, $email2Post, $grupoPost);
+}
+
 $agenda = new Contacto();
+
+$rowGrupos = $agenda->lista_grupos();
 
 $nombreRecogido = "";
 $apellidosRecogido = "";
