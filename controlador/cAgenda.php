@@ -4,8 +4,32 @@ if ($_SERVER["REQUEST_URI"] == "/dserAgenda/agenda/") {
   } else {
     require_once("modelo/mAgenda.php");
   }
+$agenda = new Contacto();
+
+if (isset($_GET['borrar'])) {
+  $idAborrar = $_GET['borrar'];
+  if ($agenda->borrarContacto($idAborrar)){
+  ?>
+  <div class="alert alert-success">
+  <strong>Borrado!</strong> Has borrado a una persona de la lista de contactos.
+  </div>
+  <?php
+} else {
+  ?>
+  <div class="alert alert-warning">
+  <strong>Atencion!</strong> No existe ese contacto en la agenda.
+</div>
+<?php
+}
+}
 
 if (($_POST) && (isset($_POST["nombreI"]))){
+
+  $idContactoBorrar = "";
+  $email2Post = "";
+  $grupo1Post = "";
+  $grupo2Post = "";
+  $grupo3Post = "";
 
   $nombrePost = filter_input(INPUT_POST, 'nombreI');
   $apellidosPost = filter_input(INPUT_POST, 'apellidosI');
@@ -14,17 +38,23 @@ if (($_POST) && (isset($_POST["nombreI"]))){
   $email2Post = filter_input(INPUT_POST, 'email2I');
   $grupoPost = $_POST['grupoI'];
 
-
+  $vueltas = 1;
   foreach ($_POST['grupoI'] as $selected_option) {
-   echo $selected_option;
+   if ($vueltas == 1) {
+     $grupo1Post = $selected_option;
+   }
+   if ($vueltas == 2) {
+     $grupo2Post = $selected_option;
+   }
+   if ($vueltas == 3) {
+     $grupo3Post = $selected_option;
+   }
+   $vueltas++;
   }
 
-  echo "Hola";
-
-  //insertarContacto($nombrePost, $apellidosPost, $telefonoPost, $email1Post, $email2Post, $grupoPost);
+  $agenda->insertarContacto($nombrePost, $apellidosPost, $telefonoPost, $email1Post, $email2Post, $grupo1Post, $grupo2Post, $grupo3Post, $idContactoBorrar);
 }
 
-$agenda = new Contacto();
 
 $rowGrupos = $agenda->lista_grupos();
 

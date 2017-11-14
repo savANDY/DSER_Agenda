@@ -13,34 +13,24 @@ class Contacto {
         return $this->link->query("SET NAMES 'utf8'");
     }
 
-    // public function insertarContacto($nombrePost, $apellidosPost, $telefonoPost, $email1Post, $email2Post, $grupoPost){
-    //
-    //   $sql="INSERT INTO contactos (contactos.Nombre, contactos.Apellidos, contactos.Telefono) VALUES ('$nombrePost', '$apellidosPost', '$telefonoPost');";
-    //   mysqli_query($link, $sql);
-    //   $sql="SELECT idContacto as id from contactos WHERE Nombre = '$nombrePost' AND Apellidos = '$apellidosPost' AND Telefono = '$telefonoPost'";
-    //   $result = mysql_query($sql, $link) or die(mysql_error());
-    //   $rowIdContacto = mysql_fetch_assoc($result);
-    //   var idContacto = $rowIdContacto['id'];
-    //
-    //   sql="INSERT INTO emails (email, idContacto) VALUES ('$email1Post', '$idContacto')";
-    //   mysqli_query($link, $sql);
-    //
-    //   if (!isEmpty($email2Post)){
-    //   sql="INSERT INTO emails (email, idContacto) VALUES ('$email2Post', '$idContacto')";
-    //   mysqli_query($link, $sql);
-    //   }
-    //
-    //   sql="INSERT INTO grupos (idGrupo, idContacto) VALUES ('$grupoPost', '$idContacto')";
-    //   mysqli_query($link, $sql);
-    //
-    //
-    // }
+    public function borrarContacto($idAborrar) {
+      $sql = "CALL spBorrarContacto('" . $idAborrar . "')";
+      $consulta=$this->link->query($sql);
 
-    public function insertarContacto($nombrePost, $apellidosPost, $telefonoPost, $email1Post, $email2Post, $grupo1Post, $grupo2Post) {
+      if ($this->link->affected_rows > 0) {
+        return true;
+      } else {
+        return false;
+      }
 
-      $consulta=$this->link->query("CALL spInsertUpdate()");
     }
-    
+
+    public function insertarContacto($nombrePost, $apellidosPost, $telefonoPost, $email1Post, $email2Post, $grupo1Post, $grupo2Post, $grupo3Post, $idContactoBorrar) {
+      $sql = "CALL spInsertUpdate('" . $nombrePost . "','" . $apellidosPost . "','" . $telefonoPost . "','" . $email1Post . "','" . $email2Post . "','" . $grupo1Post . "','" . $grupo2Post . "','" . $grupo3Post . "','" . $idContactoBorrar . "')";
+      $consulta=$this->link->query($sql);
+      echo($sql);
+    }
+
 
     public function lista_grupos() {
       $sql="SELECT * FROM `grupos`";
