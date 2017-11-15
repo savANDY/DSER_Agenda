@@ -2,6 +2,7 @@
 class Contacto {
     private $contacto;
     private $grupo;
+    private $datos;
     private $link;
 
     public function __construct() {
@@ -39,6 +40,18 @@ class Contacto {
       }
       return $this->grupo;
       $this->link=null;
+    }
+
+    public function datosPorId($id){
+      $sqlDatos = "CALL spDatosPorId($id)";
+      $consulta=$this->link->query($sqlDatos);
+      echo($sqlDatos);
+
+      $link = mysqli_connect('localhost','root','', 'dser_agenda');
+      $result = mysqli_query($link, $sqlDatos);
+
+      $rowEditar = mysqli_fetch_array($result);
+
     }
 
     public function lista_contactos($orden, $nombre, $apellidos, $grupo) {

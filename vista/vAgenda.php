@@ -105,7 +105,7 @@
           for($i=0;$i<count($row);$i++)
           {
             ?>
-            <tr>
+            <tr id="<?php echo $row[$i]["id"]; ?>">
               <td><?php echo $row[$i]["Nombre"]; ?></td>
               <td><?php echo $row[$i]["Apellidos"]; ?></td>
               <td><?php echo $row[$i]["Telefono"]; ?></td>
@@ -127,12 +127,22 @@
             <?php
           }
           if ($_SESSION['rol'] == "Administrador") {
+            if (isset($_GET['editar'])) {
+              $idEditarContacto = $_GET['editar'];
+            }
             ?>
             <form method="post" action="index.php">
               <tr>
                 <td>
                   <div class="form-group">
-                    <input type="text" class="form-control" name="nombreI" placeholder="Nombre">
+                    <input type="text" class="form-control" name="nombreI" placeholder="Nombre" <?php
+
+                    if (isset($_GET['editar'])) {
+                      echo("value='" . $rowEditar["Nombre"] . "'");
+                    }
+
+                    ?>
+                    >
                   </div>
                 </td>
                 <td>
@@ -180,8 +190,19 @@
                   </div>
                 </td>
                 <td>
+                  <?php
+                    if (isset($_GET['editar'])) {
+                   ?>
                   <button type="submit" class="btn btn-default btn-sm">
-                    Añadir</button>
+                    Editar
+                  </button>
+                <?php } else {
+                  ?>
+                  <button type="submit" class="btn btn-default btn-sm">
+                    Añadir
+                  </button>
+                  <?php
+                }?>
                   </td>
                 </tr>
               </form>
