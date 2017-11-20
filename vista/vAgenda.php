@@ -147,23 +147,50 @@
                 </td>
                 <td>
                   <div class="form-group">
-                    <input type="text" class="form-control" name="apellidosI" placeholder="Apellidos">
+                    <input type="text" class="form-control" name="apellidosI" placeholder="Apellidos" <?php
+                    if (isset($_GET['editar'])) {
+                      echo("value='" . $rowEditar["Apellidos"] . "'");
+                    }
+                    ?>
+                    >
                   </div>
                 </td>
                 <td>
                   <div class="form-group">
-                    <input type="tel" class="form-control" name="telefonoI" placeholder="Telefono">
+                    <input type="tel" class="form-control" name="telefonoI" placeholder="Telefono" <?php
+                    if (isset($_GET['editar'])) {
+                      echo("value='" . $rowEditar["Telefono"] . "'");
+                    }
+                    ?>
+                    >
                   </div>
                 </td>
                 <td>
                   <div class="form-group">
                     <div class="row" id="emailsNuevos">
                       <div class="col col-sm-8">
-                        <input type="email" class="form-control col-xs-4" name="email1I" placeholder="Email">
+                        <input type="email" class="form-control col-xs-4" name="email1I" placeholder="Email" <?php
+                        if (isset($_GET['editar'])) {
+                          echo("value='" . $email1Aeditar . "'");
+                        }
+                        ?>
+                        >
                       </div>
 
-                      <div class="col col-sm-8" id="segundoEmail" style="display:none">
-                        <input type="email" class="form-control col-xs-4" name="email2I" placeholder="Email">
+                      <div class="col col-sm-8" id="segundoEmail" style="display:<?php
+                      if (isset($emails[1])) {
+                        echo("inline-flex");
+                      } else {
+                        echo("none");
+                      }
+                      ?>
+                      ">
+                        <input type="email" class="form-control col-xs-4" name="email2I" placeholder="Email"<?php
+                        if (isset($_GET['editar'])) {
+                          echo("value='" . $email2Aeditar . "'");
+                        }
+                        ?>
+                        >
                       </div>
 
 
@@ -176,7 +203,7 @@
                     </div>
                   </div>
                 </td>
-                <td>
+                <td class="col-md-2">
                   <div class="form-group">
                     <select multiple class="form-control" id="grupo" name="grupoI[]">
 
@@ -184,7 +211,16 @@
                       for($i=0;$i<count($rowGrupos);$i++)
                       {
                         ?>
-                          <option value="<?php echo $rowGrupos[$i]["idGrupo"]; ?>"><?php echo $rowGrupos[$i]["Nombre"]; ?></option>
+                          <option
+
+                          <?php
+                          if (isset($_GET['editar'])) {
+                             if (($rowGrupos[$i]["Nombre"] == $grupo1Aeditar) || ($rowGrupos[$i]["Nombre"] == $grupo2Aeditar) || ($rowGrupos[$i]["Nombre"] == $grupo3Aeditar)){
+                              echo("selected");
+                            }
+                          }?>
+
+                           value="<?php echo $rowGrupos[$i]["idGrupo"]; ?>"><?php echo $rowGrupos[$i]["Nombre"]; ?></option>
                         <?php } ?>
                     </select>
                   </div>
@@ -193,6 +229,7 @@
                   <?php
                     if (isset($_GET['editar'])) {
                    ?>
+                   <input type="text" class="form-control" style="display:none" name="idAeditar" placeholder="id" value="<?php echo $rowEditar["id"]?>">
                   <button type="submit" class="btn btn-default btn-sm">
                     Editar
                   </button>

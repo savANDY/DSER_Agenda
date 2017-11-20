@@ -3,6 +3,7 @@ class Contacto {
     private $contacto;
     private $grupo;
     private $datos;
+    private $datosId;
     private $link;
 
     public function __construct() {
@@ -44,13 +45,12 @@ class Contacto {
 
     public function datosPorId($id){
       $sqlDatos = "CALL spDatosPorId($id)";
-      $consulta=$this->link->query($sqlDatos);
       echo($sqlDatos);
-
-      $link = mysqli_connect('localhost','root','', 'dser_agenda');
-      $result = mysqli_query($link, $sqlDatos);
-
-      $rowEditar = mysqli_fetch_array($result);
+      foreach ($this->link->query($sqlDatos) as $res) {
+          $this->datosId=$res;
+      }
+      return $this->datosId;
+      $this->link=null;
 
     }
 

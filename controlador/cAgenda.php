@@ -23,6 +23,8 @@ if (isset($_GET['borrar'])) {
 }
 }
 
+
+
 if (($_POST) && (isset($_POST["nombreI"]))){
 
   $idContactoBorrar = "";
@@ -37,6 +39,10 @@ if (($_POST) && (isset($_POST["nombreI"]))){
   $email1Post = filter_input(INPUT_POST, 'email1I');
   $email2Post = filter_input(INPUT_POST, 'email2I');
   $grupoPost = $_POST['grupoI'];
+
+  if (isset($_POST["idAeditar"])) {
+    $idContactoBorrar = filter_input(INPUT_POST, 'idAeditar');
+  }
 
   $vueltas = 1;
   foreach ($_POST['grupoI'] as $selected_option) {
@@ -123,6 +129,38 @@ if (isset ($_COOKIE["orden"]) ) {
 } else {
   $row = $agenda->lista_contactos("sinorden", $whereNombre, $whereApellidos, $whereGrupo);
 }
+
+
+
+if (isset($_GET['editar'])) {
+  $email2Aeditar = "";
+  $grupo1Aeditar= "";
+  $grupo2Aeditar = "";
+  $grupo3Aeditar = "";
+  $rowEditar = $agenda->datosPorId($_GET['editar']);
+  $emailsBBDD = $rowEditar['Email'];
+  $emails = explode("<br>", $emailsBBDD);
+  $gruposBBDD = $rowEditar['Grupo'];
+  $gruposAeditar = explode("<br>", $gruposBBDD);
+  $email1Aeditar = $emails[0];
+
+  if(isset($emails[1])) {
+    $email2Aeditar = $emails[1];
+  }
+
+  $grupo1Aeditar = $gruposAeditar[0];
+
+  if (isset($gruposAeditar[1])){
+    $grupo2Aeditar = $gruposAeditar[1];
+  }
+
+  if (isset($gruposAeditar[2])){
+    $grupo3Aeditar = $gruposAeditar[2];
+  }
+
+}
+
+
 
 if ($_SERVER["REQUEST_URI"] == "/dserAgenda/agenda/") {
     require_once("../vista/vAgenda.php");
