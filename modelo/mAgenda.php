@@ -2,6 +2,7 @@
 class Contacto {
     private $contacto;
     private $grupo;
+    private $cPorGrupos;
     private $datos;
     private $datosId;
     private $link;
@@ -27,8 +28,19 @@ class Contacto {
 
     }
 
-    public function insertarContacto($nombrePost, $apellidosPost, $telefonoPost, $email1Post, $email2Post, $grupo1Post, $grupo2Post, $grupo3Post, $idContactoBorrar) {
-      $sql = "CALL spInsertUpdate('" . $nombrePost . "','" . $apellidosPost . "','" . $telefonoPost . "','" . $email1Post . "','" . $email2Post . "','" . $grupo1Post . "','" . $grupo2Post . "','" . $grupo3Post . "','" . $idContactoBorrar . "')";
+
+public function contactosPorGrupos($idGrupo) {
+  $sql="SELECT c.Nombre, c.Apellidos FROM `rel_grupos` r, contactos c WHERE r.idGrupo = $idGrupo AND r.idContacto = c.idContacto";
+  foreach ($this->link->query($sql) as $res) {
+      $this->cPorGrupos[]=$res;
+  }
+  return $this->cPorGrupos;
+  $this->link=null;
+}
+
+
+    public function insertarContacto($nombrePost, $apellidosPost, $telefonoPost, $poblacionPost, $email1Post, $email2Post, $grupo1Post, $grupo2Post, $grupo3Post, $idContactoBorrar) {
+      $sql = "CALL spInsertUpdate('" . $nombrePost . "','" . $apellidosPost . "','" . $telefonoPost . "','" . $poblacionPost . "','" . $email1Post . "','" . $email2Post . "','" . $grupo1Post . "','" . $grupo2Post . "','" . $grupo3Post . "','" . $idContactoBorrar . "')";
       $consulta=$this->link->query($sql);
       echo($sql);
     }
@@ -59,32 +71,32 @@ class Contacto {
 
         switch ($orden) {
           case 'sinfiltro':
-          $sql="select c.idContacto id, c.Nombre, c.Apellidos, c.Telefono, group_concat(distinct e.email separator '<br>') Email, group_concat(distinct g.Nombre separator '<br>') as Grupo
+          $sql="select c.idContacto id, c.Nombre, c.Apellidos, c.Telefono, c.Poblacion, group_concat(distinct e.email separator '<br>') Email, group_concat(distinct g.Nombre separator '<br>') as Grupo
                 from contactos c, emails e, grupos g, rel_grupos rg
                 WHERE (rg.idContacto = c.idContacto) AND (g.idGrupo = rg.idGrupo) AND (e.idContacto = c.idContacto) $nombre $apellidos $grupo
                 group by c.idContacto";
             break;
           case 'nombre':
-          $sql="select c.idContacto id, c.Nombre, c.Apellidos, c.Telefono, group_concat(distinct e.email separator '<br>') Email, group_concat(distinct g.Nombre separator '<br>') as Grupo
+          $sql="select c.idContacto id, c.Nombre, c.Apellidos, c.Telefono, c.Poblacion, group_concat(distinct e.email separator '<br>') Email, group_concat(distinct g.Nombre separator '<br>') as Grupo
                 from contactos c, emails e, grupos g, rel_grupos rg
                 WHERE (rg.idContacto = c.idContacto) AND (g.idGrupo = rg.idGrupo) AND (e.idContacto = c.idContacto) $nombre $apellidos $grupo
                 group by c.idContacto order by c.Nombre";
             break;
           case 'apellido':
-          $sql="select c.idContacto id, c.Nombre, c.Apellidos, c.Telefono, group_concat(distinct e.email separator '<br>') Email, group_concat(distinct g.Nombre separator '<br>') as Grupo
+          $sql="select c.idContacto id, c.Nombre, c.Apellidos, c.Telefono, c.Poblacion, group_concat(distinct e.email separator '<br>') Email, group_concat(distinct g.Nombre separator '<br>') as Grupo
                 from contactos c, emails e, grupos g, rel_grupos rg
                 WHERE (rg.idContacto = c.idContacto) AND (g.idGrupo = rg.idGrupo) AND (e.idContacto = c.idContacto) $nombre $apellidos $grupo
                 group by c.idContacto order by c.Apellidos";
             break;
           case 'grupo':
-          $sql="select c.idContacto id, c.Nombre, c.Apellidos, c.Telefono, group_concat(distinct e.email separator '<br>') Email, group_concat(distinct g.Nombre separator '<br>') as Grupo
+          $sql="select c.idContacto id, c.Nombre, c.Apellidos, c.Telefono, c.Poblacion, group_concat(distinct e.email separator '<br>') Email, group_concat(distinct g.Nombre separator '<br>') as Grupo
                 from contactos c, emails e, grupos g, rel_grupos rg
                 WHERE (rg.idContacto = c.idContacto) AND (g.idGrupo = rg.idGrupo) AND (e.idContacto = c.idContacto) $nombre $apellidos $grupo
                 group by c.idContacto
                 order by g.Nombre";
             break;
           default:
-          $sql="select c.idContacto id, c.Nombre, c.Apellidos, c.Telefono, group_concat(distinct e.email separator '<br>') Email, group_concat(distinct g.Nombre separator '<br>') as Grupo
+          $sql="select c.idContacto id, c.Nombre, c.Apellidos, c.Telefono, c.Poblacion, group_concat(distinct e.email separator '<br>') Email, group_concat(distinct g.Nombre separator '<br>') as Grupo
                 from contactos c, emails e, grupos g, rel_grupos rg
                 WHERE (rg.idContacto = c.idContacto) AND (g.idGrupo = rg.idGrupo) AND (e.idContacto = c.idContacto) $nombre $apellidos $grupo
                 group by c.idContacto order by c.Nombre";

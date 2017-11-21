@@ -36,6 +36,7 @@ if (($_POST) && (isset($_POST["nombreI"]))){
   $nombrePost = filter_input(INPUT_POST, 'nombreI');
   $apellidosPost = filter_input(INPUT_POST, 'apellidosI');
   $telefonoPost = filter_input(INPUT_POST, 'telefonoI');
+  $poblacionPost = filter_input(INPUT_POST, 'poblacionI');
   $email1Post = filter_input(INPUT_POST, 'email1I');
   $email2Post = filter_input(INPUT_POST, 'email2I');
   $grupoPost = $_POST['grupoI'];
@@ -58,7 +59,7 @@ if (($_POST) && (isset($_POST["nombreI"]))){
    $vueltas++;
   }
 
-  $agenda->insertarContacto($nombrePost, $apellidosPost, $telefonoPost, $email1Post, $email2Post, $grupo1Post, $grupo2Post, $grupo3Post, $idContactoBorrar);
+  $agenda->insertarContacto($nombrePost, $apellidosPost, $telefonoPost, $poblacionPost, $email1Post, $email2Post, $grupo1Post, $grupo2Post, $grupo3Post, $idContactoBorrar);
 }
 
 
@@ -87,6 +88,7 @@ if(isset($_POST['resetear'])) {
   setcookie('nombre');
   setcookie('apellidos');
   setcookie('grupo');
+  setcookie('filtroGrupo');
   $whereNombre = "";
   $whereApellidos = "";
   $whereGrupo = "";
@@ -111,6 +113,12 @@ if(isset($_POST['resetear'])) {
     echo "<meta http-equiv='refresh' content='0'>";
   }
 
+  if (!empty($_POST["filtroGrupo"])) {
+    $grupoRecogido = ($_POST["filtroGrupo"]);
+    Setcookie("filtroGrupo", $grupoRecogido);
+    echo "<meta http-equiv='refresh' content='0'>";
+  }
+
   if (isset($_COOKIE["nombre"])) {
     $whereNombre = " AND (c.Nombre like '%" . $_COOKIE["nombre"] . "%')";
 
@@ -120,6 +128,9 @@ if(isset($_POST['resetear'])) {
   }
   if (isset($_COOKIE["grupo"])) {
     $whereGrupo = " AND (g.Nombre like '%" . $_COOKIE["grupo"] . "%')";
+  }
+  if (isset($_COOKIE["filtroGrupo"])) {
+    $whereGrupo = " AND (g.idGrupo =" . $_COOKIE["filtroGrupo"] . ")";
   }
 }
 

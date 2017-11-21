@@ -23,6 +23,10 @@
     }
     ?>
 
+    <p><a href="grupos.php">Ver grupos</a></p>
+    <p><a href="contactosPorGrupos.php">Ver Contactos por Grupos</a></p>
+
+
     <fieldset>
       <legend>Ordenar por:</legend>
 
@@ -75,6 +79,28 @@
             <input type="text" class="form-control" id="grupo" placeholder="Introduce un grupo" name="grupo">
           </div>
         </div>
+
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="pwd">Selecciona:</label>
+          <div class="col-sm-4">
+            <select class="form-control" required id="filtroGrupo" name="filtroGrupo">
+            <?php
+            for($i=0;$i<count($rowGrupos);$i++)
+            {
+              ?>
+                <option value="<?php echo $rowGrupos[$i]["idGrupo"]; ?>"><?php echo $rowGrupos[$i]["Nombre"]; ?></option>
+              <?php } ?>
+            </select>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-default">Buscar</button>
@@ -89,6 +115,7 @@
             <th><?php if (isset($_COOKIE["orden"]) && $_COOKIE["orden"]=="nombre") echo "↓";?>Nombre</th>
             <th><?php if (isset($_COOKIE["orden"]) && $_COOKIE["orden"]=="apellido") echo "↓";?>Apellidos</th>
             <th>Telefono</th>
+            <th>Población</th>
             <th>Email(s)</th>
             <th><?php if (isset($_COOKIE["orden"]) && $_COOKIE["orden"]=="grupo") echo "↓";?>Grupo(s)</th>
             <?php
@@ -109,6 +136,7 @@
               <td><?php echo $row[$i]["Nombre"]; ?></td>
               <td><?php echo $row[$i]["Apellidos"]; ?></td>
               <td><?php echo $row[$i]["Telefono"]; ?></td>
+              <td><?php echo $row[$i]["Poblacion"]; ?></td>
               <td><?php echo $row[$i]["Email"]; ?></td>
               <td><?php echo $row[$i]["Grupo"]; ?></td>
 
@@ -135,7 +163,7 @@
               <tr>
                 <td>
                   <div class="form-group">
-                    <input type="text" class="form-control" name="nombreI" placeholder="Nombre" <?php
+                    <input type="text" class="form-control" name="nombreI" required placeholder="Nombre" <?php
 
                     if (isset($_GET['editar'])) {
                       echo("value='" . $rowEditar["Nombre"] . "'");
@@ -147,7 +175,7 @@
                 </td>
                 <td>
                   <div class="form-group">
-                    <input type="text" class="form-control" name="apellidosI" placeholder="Apellidos" <?php
+                    <input type="text" class="form-control" name="apellidosI" required placeholder="Apellidos" <?php
                     if (isset($_GET['editar'])) {
                       echo("value='" . $rowEditar["Apellidos"] . "'");
                     }
@@ -157,7 +185,7 @@
                 </td>
                 <td>
                   <div class="form-group">
-                    <input type="tel" class="form-control" name="telefonoI" placeholder="Telefono" <?php
+                    <input type="tel" class="form-control" name="telefonoI" required placeholder="Telefono" <?php
                     if (isset($_GET['editar'])) {
                       echo("value='" . $rowEditar["Telefono"] . "'");
                     }
@@ -167,9 +195,19 @@
                 </td>
                 <td>
                   <div class="form-group">
+                    <input type="text" class="form-control" name="poblacionI" required placeholder="Población" <?php
+                    if (isset($_GET['editar'])) {
+                      echo("value='" . $rowEditar["Poblacion"] . "'");
+                    }
+                    ?>
+                    >
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group">
                     <div class="row" id="emailsNuevos">
                       <div class="col col-sm-8">
-                        <input type="email" class="form-control col-xs-4" name="email1I" placeholder="Email" <?php
+                        <input type="email" class="form-control col-xs-4" required name="email1I" placeholder="Email" <?php
                         if (isset($_GET['editar'])) {
                           echo("value='" . $email1Aeditar . "'");
                         }
@@ -205,7 +243,7 @@
                 </td>
                 <td class="col-md-2">
                   <div class="form-group">
-                    <select multiple class="form-control" id="grupo" name="grupoI[]">
+                    <select multiple class="form-control" required id="grupo" name="grupoI[]">
 
                       <?php
                       for($i=0;$i<count($rowGrupos);$i++)
